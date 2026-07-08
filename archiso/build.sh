@@ -35,6 +35,14 @@ mkdir -p "$OUT_DIR"
 echo "-> Menyalin profil baseline archiso..."
 cp -r /usr/share/archiso/configs/baseline/* "$BUILD_DIR/"
 
+# Tambahkan izin eksekusi ke profiledef.sh untuk biner/skrip di /usr/local/bin
+echo "-> Menyuntikkan izin eksekusi berkas ke profiledef.sh..."
+PROFILEDEF="$BUILD_DIR/profiledef.sh"
+if [ -f "$PROFILEDEF" ]; then
+    sed -i 's|\["/etc/shadow"\]="0:0:400"|\["/etc/shadow"\]="0:0:400"\n  \["/usr/local/bin/gaming-installer"\]="0:0:755"\n  \["/usr/local/bin/install_base.sh"\]="0:0:755"|g' "$PROFILEDEF"
+    echo "   -> Izin 0755 disematkan pada profiledef.sh"
+fi
+
 # 5. Salin paket manifest kustom (packages.x86_64) ke workspace
 echo "-> Menyalin konfigurasi paket..."
 cp "$SCRIPT_DIR/packages.x86_64" "$BUILD_DIR/packages.x86_64"
