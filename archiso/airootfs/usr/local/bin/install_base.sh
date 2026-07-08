@@ -256,6 +256,9 @@ _march="x86-64-v3"
 _cpu_mitigations="false"
 USER_KERNEL_CONFIG="CONFIG_HZ_1000=y\nCONFIG_PREEMPT=y\nCONFIG_PREEMPT_BUILD=y"
 _kernel_base="zen"
+_zenify="true"
+_compileroptlevel="2"
+_tickless="2"
 EOF
 
 # Tulis skrip instruksi kompilasi kernel bagi pengguna
