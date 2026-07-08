@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: '24'
 
-      # ── Restore caches ────────────────────────────────────────────────────────
+      # ── Restore caches ─────────────────────────────────────────────────
       - name: Restore Custom Kernel Packages Cache
         id: cache-kernel
         uses: actions/cache/restore@v4
@@ -48,7 +48,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-
 
-      # ── Build ─────────────────────────────────────────────────────────────────
+      # ── Build ──────────────────────────────────────────────────────────
       - name: Build Kernel and ISO in Arch Linux Container
         run: |
           # Buat folder cache lokal di host jika belum ada
@@ -86,29 +86,26 @@ jobs:
           # Kembalikan kepemilikan file cache ke runner user agar bisa disimpan oleh actions/cache
           sudo chown -R $USER:$USER pacman_cache cargo_cache kernel_packages
 
-      # ── Save caches (always, even on failure) ─────────────────────────────────
+      # ── Save caches (hanya jika build sukses) ──────────────────────────
       - name: Save Custom Kernel Packages Cache
-        if: always()
         uses: actions/cache/save@v4
         with:
           path: kernel_packages
           key: ${{ runner.os }}-kernel-tkg-${{ hashFiles('kernel/customization.cfg') }}
 
       - name: Save Pacman Packages Cache
-        if: always()
         uses: actions/cache/save@v4
         with:
           path: pacman_cache
           key: ${{ runner.os }}-pacman-${{ hashFiles('.github/workflows/build-iso.yml') }}
 
       - name: Save Cargo Registry Cache
-        if: always()
         uses: actions/cache/save@v4
         with:
           path: cargo_cache
           key: ${{ runner.os }}-cargo-${{ hashFiles('installer/Cargo.lock') }}
 
-      # ── Upload & Release ──────────────────────────────────────────────────────
+      # ── Upload & Release ───────────────────────────────────────────────
       - name: Upload Bootable ISO Artifact
         uses: actions/upload-artifact@v4
         with:
