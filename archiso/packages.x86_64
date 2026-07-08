@@ -1,6 +1,7 @@
 # Base System Essentials
 base
 base-devel
+linux
 linux-firmware
 intel-ucode
 amd-ucode
