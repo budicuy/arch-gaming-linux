@@ -39,6 +39,14 @@ cp -r /usr/share/archiso/configs/baseline/* "$BUILD_DIR/"
 echo "-> Menyalin konfigurasi paket..."
 cp "$SCRIPT_DIR/packages.x86_64" "$BUILD_DIR/packages.x86_64"
 
+# Aktifkan multilib di pacman.conf archiso
+echo "-> Mengaktifkan multilib di pacman.conf archiso..."
+cat <<EOF >> "$BUILD_DIR/pacman.conf"
+
+[multilib]
+Include = /etc/pacman.d/mirrorlist
+EOF
+
 # 6. Buat struktur folder airootfs di workspace
 echo "-> Menyalin custom airootfs overlay..."
 mkdir -p "$BUILD_DIR/airootfs/usr/local/bin"
