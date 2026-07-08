@@ -248,8 +248,8 @@ mkdir -p "$USER_HOME/kernel-build"
 
 # Salin customization.cfg yang sudah dikonfigurasikan
 cat <<EOF > "$USER_HOME/kernel-build/customization.cfg"
-_sched_yieldtype="bore"
-_compiler="clang"
+_cpusched="bore"
+_compiler="llvm"
 _lto_mode="full"
 _use_polly="true"
 _march="x86-64-v3"
