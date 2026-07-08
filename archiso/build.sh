@@ -47,6 +47,20 @@ cat <<EOF >> "$BUILD_DIR/pacman.conf"
 Include = /etc/pacman.d/mirrorlist
 EOF
 
+# Tambahkan nomodeset ke syslinux config agar boot normal di semua hypervisor/VM
+echo "-> Menyuntikkan parameter nomodeset ke syslinux config..."
+SYSLINUX_CFG="$BUILD_DIR/syslinux/archiso_sys-linux.cfg"
+if [ -f "$SYSLINUX_CFG" ]; then
+    sed -i 's/APPEND archisobasedir/APPEND nomodeset archisobasedir/g' "$SYSLINUX_CFG"
+    echo "   -> syslinux archiso_sys-linux.cfg: nomodeset ditambahkan"
+fi
+for cfg in "$BUILD_DIR/syslinux/"*.cfg; do
+    if [ -f "$cfg" ] && grep -q "APPEND" "$cfg"; then
+        sed -i 's/APPEND archisobasedir/APPEND nomodeset archisobasedir/g' "$cfg"
+        echo "   -> $(basename $cfg): nomodeset ditambahkan"
+    fi
+done
+
 # 6. Buat struktur folder airootfs di workspace
 echo "-> Menyalin custom airootfs overlay..."
 mkdir -p "$BUILD_DIR/airootfs/usr/local/bin"
