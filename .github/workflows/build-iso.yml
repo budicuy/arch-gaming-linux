@@ -31,6 +31,8 @@ jobs:
             archlinux:latest \
             bash -c "
               echo '-> Mengupdate system keyring & repositori...'
+              pacman-key --init
+              pacman-key --populate archlinux
               pacman -Sy --noconfirm archlinux-keyring
               pacman -Syu --noconfirm
               
