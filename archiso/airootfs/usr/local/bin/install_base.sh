@@ -193,7 +193,7 @@ EOF
     cat <<EOF > /mnt/etc/systemd/system/getty@tty1.service.d/autologin.conf
 [Service]
 ExecStart=
-ExecStart=-/sbin/agetty -o '-p -mx -- \\u' --noclear --autologin $USERNAME %I \$TERM
+ExecStart=-/sbin/agetty -o '-p -- \\u' --noclear --autologin $USERNAME %I \$TERM
 EOF
 fi
 
@@ -248,17 +248,14 @@ mkdir -p "$USER_HOME/kernel-build"
 
 # Salin customization.cfg yang sudah dikonfigurasikan
 cat <<EOF > "$USER_HOME/kernel-build/customization.cfg"
-_cpusched="bore"
-_compiler="llvm"
+_sched_yieldtype="bore"
+_compiler="clang"
 _lto_mode="full"
 _use_polly="true"
 _march="x86-64-v3"
 _cpu_mitigations="false"
 USER_KERNEL_CONFIG="CONFIG_HZ_1000=y\nCONFIG_PREEMPT=y\nCONFIG_PREEMPT_BUILD=y"
 _kernel_base="zen"
-_zenify="true"
-_compileroptlevel="2"
-_tickless="2"
 EOF
 
 # Tulis skrip instruksi kompilasi kernel bagi pengguna
