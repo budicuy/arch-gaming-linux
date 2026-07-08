@@ -38,10 +38,12 @@ jobs:
               pacman -S --noconfirm archiso rust cargo git base-devel clang llvm lld polly sudo
               
               echo '-> Mengeksekusi pembuatan/pemeriksaan kernel kustom...'
+              chmod +x ./kernel/build_kernel_pkg.sh
               ./kernel/build_kernel_pkg.sh
               
               echo '-> Mengompilasi installer Rust & mengemas berkas ISO...'
               cd archiso
+              chmod +x ./build.sh
               # Hapus sudo dari pemanggilan mkarchiso di build.sh karena kontainer sudah berjalan sebagai root
               sed -i 's/sudo mkarchiso/mkarchiso/g' build.sh
               ./build.sh
