@@ -52,7 +52,8 @@ if [[ "$PART_METHOD" == *"Auto"* ]]; then
     sgdisk --new=2:0:0 --typecode=2:8300 --change-name=2:"Arch Linux Root" "/dev/$DISK"
     
     # Reread partition table
-    partprobe "/dev/$DISK"
+    partprobe "/dev/$DISK" || true
+    udevadm settle || true
     sleep 2
     
     # Format EFI ke FAT32
