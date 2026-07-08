@@ -40,16 +40,17 @@ chown -R builder:builder "$BUILD_DIR"
 
 # 4. Jalankan kloning dan kompilasi sebagai user builder
 echo "-> Memulai kloning & kompilasi linux-tkg (sebagai user 'builder')..."
-sudo -u builder bash -c "
+sudo -u builder bash -c '
     set -e
-    git clone https://github.com/Frogging-Family/linux-tkg.git \"\$BUILD_DIR/linux-tkg\"
-    cp \"\$BUILD_DIR/customization.cfg\" \"\$BUILD_DIR/linux-tkg/\"
-    cd \"\$BUILD_DIR/linux-tkg\"
+    BUILD_DIR="/home/builder/build"
+    git clone https://github.com/Frogging-Family/linux-tkg.git "$BUILD_DIR/linux-tkg"
+    cp "$BUILD_DIR/customization.cfg" "$BUILD_DIR/linux-tkg/"
+    cd "$BUILD_DIR/linux-tkg"
     
     # Jalankan makepkg untuk memicu pembuatan paket Arch
     # -s: pasang dependensi pacman otomatis, -r: hapus dep setelah build, --noconfirm: setujui semua prompt
     makepkg --noconfirm -s -r
-"
+'
 
 # 5. Ambil file paket hasil build (.pkg.tar.zst) ke folder output workspace
 echo "-> Menyalin file .pkg.tar.zst hasil build ke output..."
