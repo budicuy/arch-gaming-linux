@@ -77,10 +77,10 @@ fi
 
 # 7. Eksekusi mkarchiso untuk mem-build ISO final
 echo "-> Menjalankan mkarchiso untuk mengemas sistem (memerlukan hak root)..."
-echo "Menjalankan perintah: sudo mkarchiso -v -w \"$BUILD_DIR/work\" -o \"$OUT_DIR\" \"$BUILD_DIR\""
+echo "Menjalankan perintah: sudo mkarchiso -v -w /tmp/archiso-work -o \"$OUT_DIR\" \"$BUILD_DIR\""
 echo "Silakan masukkan password sudo jika diminta."
 
-sudo mkarchiso -v -w "$BUILD_DIR/work" -o "$OUT_DIR" "$BUILD_DIR"
+sudo mkarchiso -v -w /tmp/archiso-work -o "$OUT_DIR" "$BUILD_DIR"
 
 echo "=================================================="
 echo "    BUILD SELESAI DENGAN SUKSES!                   "
