@@ -44,7 +44,7 @@ jobs:
               pacman -Syu --noconfirm
               
               echo '-> Memasang peralatan kompilasi dan build ISO...'
-              pacman -S --noconfirm archiso rust cargo git base-devel clang llvm lld polly sudo
+              pacman -S --noconfirm archiso rust cargo git base-devel clang llvm lld polly sudo grub syslinux
               
               echo '-> Mengeksekusi pembuatan/pemeriksaan kernel kustom...'
               chmod +x ./kernel/build_kernel_pkg.sh

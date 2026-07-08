@@ -51,3 +51,4 @@ reflector
 grub
 efibootmgr
 os-prober
+syslinux
