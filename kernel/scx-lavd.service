@@ -1,0 +1,14 @@
+[Unit]
+Description=LAVD Scheduler (Latency-criticality Aware Virtual Deadline via sched_ext)
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/scx_lavd
+Restart=always
+RestartSec=2
+CPUSchedulingPolicy=rr
+CPUSchedulingPriority=99
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,56 @@
+name: Build Arch Gaming Linux ISO
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache Custom Kernel Packages
+        id: cache-kernel
+        uses: actions/cache@v4
+        with:
+          path: kernel_packages
+          key: ${{ runner.os }}-kernel-tkg-${{ hashFiles('kernel/customization.cfg') }}
+
+      - name: Build Kernel and ISO in Arch Linux Container
+        run: |
+          # Jalankan seluruh proses kompilasi dan build di kontainer Arch Linux dengan mode privileged
+          docker run --privileged \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            archlinux:latest \
+            bash -c "
+              echo '-> Mengupdate system keyring & repositori...'
+              pacman -Sy --noconfirm archlinux-keyring
+              pacman -Syu --noconfirm
+              
+              echo '-> Memasang peralatan kompilasi dan build ISO...'
+              pacman -S --noconfirm archiso rust cargo git base-devel clang llvm lld polly sudo
+              
+              echo '-> Mengeksekusi pembuatan/pemeriksaan kernel kustom...'
+              ./kernel/build_kernel_pkg.sh
+              
+              echo '-> Mengompilasi installer Rust & mengemas berkas ISO...'
+              cd archiso
+              # Hapus sudo dari pemanggilan mkarchiso di build.sh karena kontainer sudah berjalan sebagai root
+              sed -i 's/sudo mkarchiso/mkarchiso/g' build.sh
+              ./build.sh
+            "
+
+      - name: Upload Bootable ISO Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Arch-Gaming-Linux-ISO
+          path: archiso/out/archlinux-*.iso
+          if-no-files-found: error
+          retention-days: 7

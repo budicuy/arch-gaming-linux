@@ -1,0 +1,10 @@
+pub mod welcome;
+pub mod network;
+pub mod partition;
+pub mod desktop;
+pub mod kernel;
+pub mod shell;
+pub mod gaming;
+pub mod user;
+pub mod summary;
+pub mod install;
