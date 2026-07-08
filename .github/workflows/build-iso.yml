@@ -10,6 +10,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -63,3 +65,21 @@ jobs:
           path: archiso/out/archlinux-*.iso
           if-no-files-found: error
           retention-days: 7
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          tag_name: latest
+          name: Arch Gaming Linux Latest Build
+          body: |
+            Automated pre-release build of the custom Arch Gaming Linux ISO.
+            
+            This ISO includes:
+            - Custom `linux-tkg-zen` kernel optimized for low latency.
+            - Rust-based TUI installer.
+            - System-wide gaming optimizations and dependencies.
+          files: archiso/out/archlinux-*.iso
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
