@@ -28,12 +28,36 @@ jobs:
         with:
           path: kernel_packages
           key: ${{ runner.os }}-kernel-tkg-${{ hashFiles('kernel/customization.cfg') }}
+          save-always: true
+
+      - name: Cache Pacman Packages
+        uses: actions/cache@v4
+        with:
+          path: pacman_cache
+          key: ${{ runner.os }}-pacman-${{ hashFiles('.github/workflows/build-iso.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-pacman-
+          save-always: true
+
+      - name: Cache Cargo Registry
+        uses: actions/cache@v4
+        with:
+          path: cargo_cache
+          key: ${{ runner.os }}-cargo-${{ hashFiles('installer/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+          save-always: true
 
       - name: Build Kernel and ISO in Arch Linux Container
         run: |
+          # Buat folder cache lokal di host jika belum ada
+          mkdir -p pacman_cache cargo_cache kernel_packages
+          
           # Jalankan seluruh proses kompilasi dan build di kontainer Arch Linux dengan mode privileged
           docker run --privileged \
             -v ${{ github.workspace }}:/workspace \
+            -v ${{ github.workspace }}/pacman_cache:/var/cache/pacman/pkg \
+            -v ${{ github.workspace }}/cargo_cache:/root/.cargo \
             -w /workspace \
             archlinux:latest \
             bash -c "
@@ -57,6 +81,9 @@ jobs:
               sed -i 's/sudo mkarchiso/mkarchiso/g' build.sh
               ./build.sh
             "
+          
+          # Kembalikan kepemilikan file cache ke runner user agar bisa disimpan oleh actions/cache
+          sudo chown -R $USER:$USER pacman_cache cargo_cache kernel_packages
 
       - name: Upload Bootable ISO Artifact
         uses: actions/upload-artifact@v4
