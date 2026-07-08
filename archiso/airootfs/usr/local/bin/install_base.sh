@@ -53,8 +53,7 @@ if [[ "$PART_METHOD" == *"Auto"* ]]; then
     
     # Reread partition table
     partprobe "/dev/$DISK" || true
-    udevadm settle || true
-    sleep 2
+    sleep 3
     
     # Format EFI ke FAT32
     report_progress 15 "Format EFI system partition..."
@@ -82,11 +81,11 @@ if [[ "$PART_METHOD" == *"Auto"* ]]; then
         # Mount subvolume untuk instalasi pacstrap
         report_progress 30 "Melakukan mounting subvolume BTRFS..."
         mkdir -p /mnt
-        mount -o noatime,compress=zstd,ssd,space_cache=v2,subvol=@ "$ROOT_PART" /mnt
+        mount -o noatime,compress=zstd,space_cache=v2,subvol=@ "$ROOT_PART" /mnt
         mkdir -p /mnt/{home,var/cache,var/log,boot}
-        mount -o noatime,compress=zstd,ssd,space_cache=v2,subvol=@home "$ROOT_PART" /mnt/home
-        mount -o noatime,compress=zstd,ssd,space_cache=v2,subvol=@cache "$ROOT_PART" /mnt/var/cache
-        mount -o noatime,compress=zstd,ssd,space_cache=v2,subvol=@log "$ROOT_PART" /mnt/var/log
+        mount -o noatime,compress=zstd,space_cache=v2,subvol=@home "$ROOT_PART" /mnt/home
+        mount -o noatime,compress=zstd,space_cache=v2,subvol=@cache "$ROOT_PART" /mnt/var/cache
+        mount -o noatime,compress=zstd,space_cache=v2,subvol=@log "$ROOT_PART" /mnt/var/log
     else
         report_progress 20 "Format EXT4 filesystem pada $ROOT_PART..."
         mkfs.ext4 -F "$ROOT_PART"
