@@ -4,6 +4,8 @@ linux
 linux-firmware
 intel-ucode
 amd-ucode
+mkinitcpio
+mkinitcpio-archiso
 
 # TUI Installer dependencies
 git
