@@ -22,6 +22,25 @@ enum AppEvent {
 
 #[tokio::main]
 async fn main() -> io::Result<()> {
+    // Daftarkan panic hook agar terminal kembali ke kondisi normal jika terjadi crash
+    std::panic::set_hook(Box::new(|panic_info| {
+        let _ = tui::restore();
+        eprintln!("==================================================");
+        eprintln!(" KESALAHAN VITAL: Installer mengalami panic!");
+        eprintln!("==================================================");
+        if let Some(s) = panic_info.payload().downcast_ref::<&str>() {
+            eprintln!("Detail: {}", s);
+        } else if let Some(s) = panic_info.payload().downcast_ref::<String>() {
+            eprintln!("Detail: {}", s);
+        } else {
+            eprintln!("Detail: Tidak diketahui");
+        }
+        if let Some(location) = panic_info.location() {
+            eprintln!("Lokasi: {}:{}:{}", location.file(), location.line(), location.column());
+        }
+        eprintln!("==================================================");
+    }));
+
     // Inisialisasi TUI terminal
     let mut terminal = tui::init()?;
     

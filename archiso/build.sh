@@ -69,6 +69,7 @@ mkdir -p "$BUILD_DIR/airootfs/root"
 
 # Salin biner hasil kompilasi Rust installer
 cp "$INSTALLER_DIR/target/release/gaming-installer" "$BUILD_DIR/airootfs/usr/local/bin/gaming-installer"
+chmod +x "$BUILD_DIR/airootfs/usr/local/bin/gaming-installer"
 
 # Salin skrip bash install_base.sh
 cp "$SCRIPT_DIR/airootfs/usr/local/bin/install_base.sh" "$BUILD_DIR/airootfs/usr/local/bin/install_base.sh"

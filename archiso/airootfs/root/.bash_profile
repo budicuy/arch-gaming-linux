@@ -9,9 +9,11 @@ if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
     # Eksekusi biner installer Rust
     if [ -f /usr/local/bin/gaming-installer ]; then
         /usr/local/bin/gaming-installer
+        echo "Installer telah keluar. Membuka shell root..."
+        exec /bin/bash
     else
         echo "Error: Biner installer tidak ditemukan di /usr/local/bin/gaming-installer"
         echo "Membuka shell bash alternatif..."
-        /bin/bash
+        exec /bin/bash
     fi
 fi
